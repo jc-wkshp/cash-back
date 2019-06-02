@@ -25,7 +25,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: msg-processor:latest
+        name: cash-back:latest
     triggers:
     - type: GitHub
       github:
@@ -56,8 +56,8 @@ objects:
           app: cash-back
         name: cash-back
       spec:
-        containers:                                        
-          image: cash-back:latest
+        containers:
+        - image: cash-back:latest
           imagePullPolicy: Always
           name: cash-back
           ports:
@@ -68,7 +68,7 @@ objects:
               cpu: 100m 
               memory: 500Mi 
             limits:
-              cpu: 1000m 
+              cpu: 200m 
               memory: 1Gi 
         dnsPolicy: ClusterFirst
         restartPolicy: Always
