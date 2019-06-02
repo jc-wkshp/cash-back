@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import java.util.logging.Logger;
 
 import com.uber.jaeger.Configuration;
-import com.uber.jaeger.samplers.ProbabilisticSampler;
+import com.uber.jaeger.samplers.ConstSampler;    
 
 import io.opentracing.Tracer;
 
@@ -18,8 +18,7 @@ public class CashBackApplication {
 	
 	@Bean
 	public Tracer jaegerTracer() {
-
-		return new Configuration("cash-back", new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
+		return new Configuration("cash-back", new Configuration.SamplerConfiguration(ConstSampler.TYPE, 1),
 				new Configuration.ReporterConfiguration())
 				.getTracer();
 	}
