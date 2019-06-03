@@ -1,6 +1,10 @@
+def mvnCmd = "mvn -s configuration/nexus_settings.xml"
+pipeline {
+   
+    agent {
+        label 'maven'
+    }
 
-node('maven') {
-    def mvnCmd = "mvn -s configuration/nexus_settings.xml"
     stages {
 
         stage('Build App') {
@@ -27,4 +31,4 @@ node('maven') {
             }
         }
     } // End of Stages
-} // End of node
+} // End of pipeline
