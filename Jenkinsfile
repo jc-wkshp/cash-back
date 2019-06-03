@@ -5,13 +5,14 @@
 
             stage('Build App') {
                 steps {
-                    git branch: 'eap-7', url: 'http://gogs:3000/gogs/openshift-tasks.git'
+                    echo "Build App."
                     sh "${mvnCmd} install -DskipTests=true"
                 }
             }
 
             stage('Test') {
                 steps {
+                    echo "Test App."
                     sh "${mvnCmd} test"
                     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
                 }
@@ -19,18 +20,12 @@
 
             stage('Code Analysis') {
                 steps {
+                    echo "Code Analysis App."
                     script {
                     sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -DskipTests=true"
                     }
                 }
             }
-
-            stage('Archive App') {
-                steps {
-                    sh "${mvnCmd} deploy -DskipTests=true -P nexus3"
-                }
-            }
-
         } // End of Stages
     } // End of node
 } // End
