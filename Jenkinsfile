@@ -48,7 +48,7 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject("inno-apps-dev") {
                             openshift.selector("bc", "cash-back").startBuild("--from-file=./target/app.jar", "--wait=true")
-                            openshift.tag("cash-back:latest", "tasks:${devTag}")
+                            openshift.tag("cash-back:latest", "cash-back:${devTag}")
                         }
                     }
                 }
@@ -60,7 +60,7 @@ pipeline {
                 script {
                     openshift.withCluster() {
                         openshift.withProject("inno-apps-dev") {
-                            openshift.set("image", "dc/cash-back", "tasks=docker-registry.default.svc:5000/inno-apps-dev/cash-back:${devTag}")
+                            openshift.set("image", "dc/cash-back", "cash-back=docker-registry.default.svc:5000/inno-apps-dev/cash-back:${devTag}")
                             openshift.selector("dc", "cash-back").rollout().latest();
                         }
                     }
