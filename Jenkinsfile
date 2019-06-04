@@ -15,18 +15,18 @@ pipeline {
         }
 
         stage('Unit Test And Code Analysis') {
-            parallel {
-
-                stage('unitTest') {
-                    echo "Test App"
-                    sh "${mvnCmd} test"
-                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-                }
-
-                stage('codeAnalysis') {
-                    echo "Running Code Analysis"
-                    sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -DskipTests=true"
-                }
+            steps {
+                parallel (
+                    unitTest: {
+                        echo "Test App"
+                        sh "${mvnCmd} test"
+                        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                    },
+                    codeAnalysis: {
+                        echo "Running Code Analysis"
+                        sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -DskipTests=true"
+                    }
+                )
             }
         }
 
