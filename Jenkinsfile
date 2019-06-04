@@ -1,6 +1,4 @@
 def mvnCmd = "mvn -s configuration/nexus_settings.xml"
-def version = getVersionFromPom("pom.xml")
-def devTag  = "${version}-" + currentBuild.number
 
 pipeline {
    
@@ -10,6 +8,9 @@ pipeline {
 
     stages {
 
+        def version = getVersionFromPom("pom.xml")
+        def devTag  = "${version}-" + currentBuild.number
+        
         stage('Build App') {
             steps {
                 echo "Building version ${devTag}"
@@ -67,9 +68,6 @@ pipeline {
     } // End of Stages
 } // End of pipeline
 
-// Convenience Functions to read version from the pom.xml
-// Do not change anything below this line.
-// --------------------------------------------------------
 def getVersionFromPom(pom) {
   def matcher = readFile(pom) =~ '<version>(.+)</version>'
   matcher ? matcher[0][1] : null
