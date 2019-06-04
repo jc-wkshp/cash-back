@@ -29,7 +29,7 @@ pipeline {
 
         stage('Archive App') {
             steps {
-                sh "${mvnCmd} deploy -DskipTests=true -DaltDeploymentRepository=nexus::default::http://nexus:8081/repository/releases"
+                sh "${mvnCmd} deploy -DskipTests=true -DaltDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-releases/"
             }
         }
 
