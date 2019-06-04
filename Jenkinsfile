@@ -17,7 +17,7 @@ pipeline {
                     devTag  = "${version}-" + currentBuild.number
                 }
                 echo "Building version ${devTag}"
-                sh "${mvnCmd} install -DskipTests=true"
+                sh "${mvnCmd} clean package -DskipTests=true"
             }
         }
 
@@ -43,11 +43,10 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh "cp ./target/cash-back-0.1.0.jar ./target/app.jar"
                 script {
                     openshift.withCluster() {
                         openshift.withProject("inno-apps-dev") {
-                            openshift.selector("bc", "cash-back").startBuild("--from-file=./target/app.jar", "--wait=true")
+                            openshift.selector("bc", "cash-back").startBuild("--from-file=./target/cash-back.jar", "--wait=true")
                             openshift.tag("cash-back:latest", "cash-back:${devTag}")
                         }
                     }
