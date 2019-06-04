@@ -1,4 +1,6 @@
 def mvnCmd = "mvn -s configuration/nexus_settings.xml"
+def version = ''
+def devTag = ''
 
 pipeline {
    
@@ -8,11 +10,12 @@ pipeline {
 
     stages {
 
-        def version = getVersionFromPom("pom.xml")
-        def devTag  = "${version}-" + currentBuild.number
-        
         stage('Build App') {
             steps {
+                script {
+                    version = getVersionFromPom("pom.xml")
+                    devTag  = "${version}-" + currentBuild.number
+                }
                 echo "Building version ${devTag}"
                 sh "${mvnCmd} install -DskipTests=true"
             }
