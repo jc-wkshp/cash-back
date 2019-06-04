@@ -16,11 +16,13 @@ pipeline {
 
         stage('Unit Test And Code Analysis') {
             parallel {
+                
                 unitTest: {
                     echo "Test App"
                     sh "${mvnCmd} test"
                     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-                },
+                }
+
                 codeAnalysis: {
                     echo "Running Code Analysis"
                     sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -DskipTests=true"
