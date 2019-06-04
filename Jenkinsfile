@@ -38,7 +38,7 @@ pipeline {
                 sh "cp ./target/cash-back-0.1.0.jar ./target/app.jar"
                 script {
                     openshift.withCluster() {
-                        openshift.withProject(env.DEV_PROJECT) {
+                        openshift.withProject("inno-apps-dev") {
                             openshift.selector("bc", "cash-back").startBuild("--from-file=./target/app.jar", "--wait=true")
                         }
                     }
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     openshift.withCluster() {
-                        openshift.withProject(env.DEV_PROJECT) {
+                        openshift.withProject("inno-apps-dev") {
                             openshift.selector("dc", "cash-back").rollout().latest();
                         }
                     }
