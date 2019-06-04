@@ -1,4 +1,7 @@
 def mvnCmd = "mvn -s configuration/nexus_settings.xml"
+def version = getVersionFromPom("pom.xml")
+def devTag  = "${version}-" + currentBuild.number
+
 pipeline {
    
     agent {
@@ -9,6 +12,7 @@ pipeline {
 
         stage('Build App') {
             steps {
+                echo "Building version ${devTag}"
                 sh "${mvnCmd} install -DskipTests=true"
             }
         }
@@ -40,6 +44,7 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject("inno-apps-dev") {
                             openshift.selector("bc", "cash-back").startBuild("--from-file=./target/app.jar", "--wait=true")
+                            openshift.tag("cash-back:latest", "tasks:${devTag}")
                         }
                     }
                 }
@@ -51,6 +56,7 @@ pipeline {
                 script {
                     openshift.withCluster() {
                         openshift.withProject("inno-apps-dev") {
+                            openshift.set("image", "dc/cash-back", "tasks=docker-registry.default.svc:5000/inno-apps-dev/cash-back:${devTag}")
                             openshift.selector("dc", "cash-back").rollout().latest();
                         }
                     }
@@ -60,3 +66,11 @@ pipeline {
 
     } // End of Stages
 } // End of pipeline
+
+// Convenience Functions to read version from the pom.xml
+// Do not change anything below this line.
+// --------------------------------------------------------
+def getVersionFromPom(pom) {
+  def matcher = readFile(pom) =~ '<version>(.+)</version>'
+  matcher ? matcher[0][1] : null
+}

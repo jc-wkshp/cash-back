@@ -5,7 +5,7 @@
 
 	<groupId>com.innov.demo</groupId>
 	<artifactId>cash-back</artifactId>
-    <version>0.1.0</version>
+  <version>0.1.0</version>
 	<packaging>jar</packaging>
 	
 	<name>Cash Back</name>
