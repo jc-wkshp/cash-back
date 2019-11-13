@@ -16,7 +16,7 @@ class PaymentController {
 	
     @RequestMapping(value="/")
 	String showStatus(){
-		return "Cash Back Demo Application - running.";
+		return "Cash Back Demo Application - running for FSI.";
     }
     
     @GetMapping(value="/payments")
@@ -29,7 +29,7 @@ class PaymentController {
 	String postPayment(@RequestBody Payment payment){
         logger.info("Posting Payments to Service");
         paymentService.savePayment(payment);
-		return "Payment -["+payment+"] Savedt";
+		return "Payment -["+payment+"] Saved";
     }
 
     @GetMapping(value="/generr")
