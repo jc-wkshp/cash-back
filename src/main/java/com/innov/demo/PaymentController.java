@@ -29,7 +29,7 @@ class PaymentController {
 	String postPayment(@RequestBody Payment payment){
         logger.info("Posting Payments to Service");
         paymentService.savePayment(payment);
-		return "Payment -["+payment+"] Saved";
+		return "Payment -["+payment+"] Saved !";
     }
 
     @GetMapping(value="/generr")
